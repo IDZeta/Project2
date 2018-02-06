@@ -285,7 +285,7 @@ public class Interface extends javax.swing.JFrame {
         if(allP.isEmpty() == false){
             if(isRunning == false){
                 outputArea.append("Clock started\n");
-                theClock.prepareScheduler(allP, newP, readyP);
+                theClock.prepareScheduler(allP, newP, readyP, runningP, waitingP, termP);
                 //Loads the current states of the Processes into the Clock's Scheduler
                 theClock.startClock();
                 isRunning = true;
