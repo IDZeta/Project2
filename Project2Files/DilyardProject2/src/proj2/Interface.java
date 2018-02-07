@@ -66,56 +66,58 @@ public class Interface extends javax.swing.JFrame {
             outputArea.append("You entered a non-numeric Time Quantum\n");
             valid = false;
         }
-        for(int i = 1; i < splitText.length-counter; i += 3){
-            try{ //Check the Data next
-                Integer.parseInt(splitText[i]); //Check Creation Time
-                valid = true;
-            }catch(NumberFormatException e){
-                outputArea.append("A processs you entered had a non-numeric creation time\n");
-                valid = false;
-                break;
-            } //Now check the Strings
-            if(splitText[i+1].isEmpty() == true){ //Check Name
-                valid = false;
-                break;
-            }
-            if(splitText[i+2].isEmpty() == true){ //Check Trace Tape
-                valid = false;
-                outputArea.append("A process you entered did not have a Trace Tape\n");
-                break;
-            }else{ //If the Trace Tape has data, split it and check formatting
-                String[] splitTT = splitText[i+2].split(" ");
-                //First, check for and remove empty slots created by extra spaces
-                for(int j = 0; j < splitTT.length; j++){
-                    if(splitTT[j].isEmpty()){
-                        for(int k = j; k < splitTT.length-1; k++){
-                            splitTT[k] = splitTT[k+1];
+        if(valid = true){
+            for(int i = 1; i < splitText.length-counter; i += 3){
+                try{ //Check the Data next
+                    Integer.parseInt(splitText[i]); //Check Creation Time
+                    valid = true;
+                }catch(NumberFormatException e){
+                    outputArea.append("A processs you entered had a non-numeric creation time\n");
+                    valid = false;
+                    break;
+                } //Now check the Strings
+                if(splitText[i+1].isEmpty() == true){ //Check Name
+                    valid = false;
+                    break;
+                }
+                if(splitText[i+2].isEmpty() == true){ //Check Trace Tape
+                    valid = false;
+                    outputArea.append("A process you entered did not have a Trace Tape\n");
+                    break;
+                }else{ //If the Trace Tape has data, split it and check formatting
+                    String[] splitTT = splitText[i+2].split(" ");
+                    //First, check for and remove empty slots created by extra spaces
+                    for(int j = 0; j < splitTT.length; j++){
+                        if(splitTT[j].isEmpty()){
+                            for(int k = j; k < splitTT.length-1; k++){
+                                splitTT[k] = splitTT[k+1];
+                            }
                         }
-                    }
-                } //Now check the Trace Tape contents
-                for(int j = 0; j < splitTT.length; j++){ 
-                    try{ //Check for ints in splitTT first 
-                        Integer.parseInt(splitTT[j]);
-                        if(j%2 == 0){ //Ints should be in odd-numbered locations
-                            outputArea.append("An integer in the Trace Tape is in the wrong place\n");
-                            valid = false;
-                            break;
-                        }
-                        valid = true;
-                    }catch(NumberFormatException e){ //Check if Strings are C or I
-                        if(splitTT[j].equals("C") && j%4 == 0){
-                            valid = true; //C's slot will always be divisible by 4
-                        }else if(splitTT[j].equals("I")){
-                            valid = true; //If it's not C, it's probably I
-                        }else{
-                            outputArea.append("Trace Tape can only contain C, I, or integers\n");
-                            valid = false; //If not, the whole Tape is wrong
-                            break;
+                    } //Now check the Trace Tape contents
+                    for(int j = 0; j < splitTT.length; j++){ 
+                        try{ //Check for ints in splitTT first 
+                            Integer.parseInt(splitTT[j]);
+                            if(j%2 == 0){ //Ints should be in odd-numbered locations
+                                outputArea.append("An integer in the Trace Tape is in the wrong place\n");
+                                valid = false;
+                                break;
+                            }
+                            valid = true;
+                        }catch(NumberFormatException e){ //Check if Strings are C or I
+                            if(splitTT[j].equals("C") && j%4 == 0){
+                                valid = true; //C's slot will always be divisible by 4
+                            }else if(splitTT[j].equals("I")){
+                                valid = true; //If it's not C, it's probably I
+                            }else{
+                                outputArea.append("Trace Tape can only contain C, I, or integers\n");
+                                valid = false; //If not, the whole Tape is wrong
+                                break;
+                            }
                         }
                     }
                 }
-            }
-        } //That was exhausting... Good thing we only have to do this once
+            } //That was exhausting... Good thing we only have to do this once
+        }
         return valid;
         //The Try/Catch model for this code was found here:
         //https://study.com/academy/lesson/how-to-check-if-a-string-is-an-integer-in-java.html
@@ -300,7 +302,7 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_runPauseButtonActionPerformed
     private void statusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusButtonActionPerformed
         if(allP.isEmpty() == false){
-            outputArea.setText("\tSystem Status Report\n");
+            outputArea.append("\tSystem Status Report\n");
             outputArea.append("Time Quantum: "+Integer.toString(timeQuantum)+"\n");
             getSystemTime();
             outputArea.append("Current System Time: "+Integer.toString(currentTime)+"\n");
