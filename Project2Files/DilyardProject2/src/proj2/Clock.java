@@ -32,7 +32,7 @@ public class Clock implements Runnable{
     public void run(){
         while (true){  
             if(paused == false){
-                theScheduler.loadProcesses(allP, newP, readyP);
+                theScheduler.loadProcesses(allP, newP, readyP, runningP, waitingP, termP);
                 incrementTime();
                 label.setText(Integer.toString(currentTime));
                 theScheduler.checkProcessStatus(currentTime);
