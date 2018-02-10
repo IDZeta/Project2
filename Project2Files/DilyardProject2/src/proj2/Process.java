@@ -6,7 +6,7 @@
  */
 package proj2;
 
-public class Process{
+public class Process implements Comparable<Process>{
     
     private int creationTime;
     private String name, traceTape;
