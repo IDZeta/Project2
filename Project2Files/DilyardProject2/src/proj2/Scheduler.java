@@ -121,11 +121,11 @@ public class Scheduler {
             }
         }
         //Sort everything moving into Ready
-        if(toSort.length > 1){
-            sortProcessList(toSort);
-        }
-        for(int i = 0; i < toSort.length; i++) {
-            readyP.add(toSort[i]);
-        }
+//        if(toSort.size() > 1){
+//            sortProcessList(toSort);
+//        }
+//        for(int i = 0; i < toSort.size(); i++) {
+//            readyP.add(toSort[i]);
+//        }
     }
 }

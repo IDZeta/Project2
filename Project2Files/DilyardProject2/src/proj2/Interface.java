@@ -359,7 +359,7 @@ public class Interface extends javax.swing.JFrame {
             theClock.incrementTime();
             getSystemTime();
             clockDisplay.setText(Integer.toString(currentTime));
-            theScheduler.loadProcesses(allP, newP, readyP);
+            theScheduler.loadProcesses(allP, newP, readyP, runningP, waitingP, termP);
             theScheduler.checkProcessStatus(currentTime);
         }else{
             outputArea.append("No data read into memory\n");
