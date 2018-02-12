@@ -121,11 +121,13 @@ public class Scheduler {
             }
         }
         //Sort everything moving into Ready
-//        if(listToSort.size() > 1){
-//            sortProcessList(listToSort);
-//        }
-//        for(int i = 0; i < listToSort.size(); i++) {
-//            readyProcessList.add(listToSort[i]);
-//        }
+        if(listToSort.isEmpty() == false){
+            Collections.sort(listToSort); //Sort Processes entering Ready by Creation Time
+            readyProcessList.addAll(listToSort);
+            listToSort.clear();
+        }
+        else if(listToSort.size() == 1){
+            readyProcessList.add(listToSort.get(0));
+        }
     }
 }
