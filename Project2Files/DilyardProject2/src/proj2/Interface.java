@@ -43,72 +43,99 @@ public class Interface extends javax.swing.JFrame {
         //This Scheduler is only called when the system is manually stepped forward
         //While running on its own, the Clock's Scheduler handles the Processes
     }
+    
     public void getSystemTime(){
         currentTime = theClock.getCurrentTime();
     }
+    
     public Boolean isInputDataValid(){
         Boolean valid = false;
         counter = 0;
+       
         //First, remove any empty slots created by extra lines
         for(int i = 0; i < splitText.length; i++){
+            
             if(splitText[i].isEmpty()){
                 System.out.println("\tEmpty slot in Process Array");
+                
                 for(int j = i; j < splitText.length-1; j++){
                     splitText[j] = splitText[j+1];
                 }
+                
                 counter++; //Save the number of slots entries are shifted up
             }
         }
+        
         try{ //Check if the Time Quantum is a number
             Integer.parseInt(splitText[0]);
             valid = true;
-        }catch(NumberFormatException e){
+        }
+        catch(NumberFormatException e){
             outputArea.append("You entered a non-numeric Time Quantum\n");
             valid = false;
         }
+        
         if(valid = true){
+            
             for(int i = 1; i < splitText.length-counter; i += 3){
+                
                 try{ //Check the Data next
                     Integer.parseInt(splitText[i]); //Check Creation Time
                     valid = true;
-                }catch(NumberFormatException e){
+                }
+                catch(NumberFormatException e){
                     outputArea.append("A processs you entered had a non-numeric creation time\n");
                     valid = false;
                     break;
-                } //Now check the Strings
+                }
+                
+                //Now check the Strings
                 if(splitText[i+1].isEmpty() == true){ //Check Name
                     valid = false;
                     break;
                 }
+                
                 if(splitText[i+2].isEmpty() == true){ //Check Trace Tape
                     valid = false;
                     outputArea.append("A process you entered did not have a Trace Tape\n");
                     break;
-                }else{ //If the Trace Tape has data, split it and check formatting
+                }
+                else{ //If the Trace Tape has data, split it and check formatting
                     String[] splitTT = splitText[i+2].split(" ");
+                    
                     //First, check for and remove empty slots created by extra spaces
                     for(int j = 0; j < splitTT.length; j++){
+                        
                         if(splitTT[j].isEmpty()){
+                            
                             for(int k = j; k < splitTT.length-1; k++){
                                 splitTT[k] = splitTT[k+1];
                             }
                         }
-                    } //Now check the Trace Tape contents
+                    }
+                    
+                    //Now check the Trace Tape contents
                     for(int j = 0; j < splitTT.length; j++){ 
+                        
                         try{ //Check for ints in splitTT first 
                             Integer.parseInt(splitTT[j]);
+                            
                             if(j%2 == 0){ //Ints should be in odd-numbered locations
                                 outputArea.append("An integer in the Trace Tape is in the wrong place\n");
                                 valid = false;
                                 break;
                             }
                             valid = true;
-                        }catch(NumberFormatException e){ //Check if Strings are C or I
+                        }
+                        catch(NumberFormatException e){ //Check if Strings are C or I
+                            
                             if(splitTT[j].equals("C") && j%4 == 0){
                                 valid = true; //C's slot will always be divisible by 4
-                            }else if(splitTT[j].equals("I")){
+                            }
+                            else if(splitTT[j].equals("I")){
                                 valid = true; //If it's not C, it's probably I
-                            }else{
+                            }
+                            else{
                                 outputArea.append("Trace Tape can only contain C, I, or integers\n");
                                 valid = false; //If not, the whole Tape is wrong
                                 break;
@@ -268,9 +295,11 @@ public class Interface extends javax.swing.JFrame {
     private void readDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readDataButtonActionPerformed
         String input = inputArea.getText();
         splitText = input.split("\n");
+        
         if(isInputDataValid() == true){ //isInputDataValid() does ALL sanity checks at once
             outputArea.setText("The data you entered is formatted correctly\n");
             timeQuantum = Integer.parseInt(splitText[0]);
+            
             //If any slots were shifted up, ignore slots at the end
             for(int i = 1; i < splitText.length-counter; i += 3){
                 int processCT = Integer.parseInt(splitText[i])+currentTime;
@@ -280,23 +309,27 @@ public class Interface extends javax.swing.JFrame {
                 String processTT = splitText[i+2];
                 allProcesses.add(new Process(processCT, processName, processTT)); 
             }
+            
             outputArea.setText("Input data successfully read into memory\n");
         }
     }//GEN-LAST:event_readDataButtonActionPerformed
     private void runPauseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runPauseButtonActionPerformed
         if(allProcesses.isEmpty() == false){
+            
             if(isRunning == false){
                 outputArea.append("Clock started\n");
                 theClock.prepareScheduler(allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList);
                 //Loads the current states of the Processes into the Clock's Scheduler
                 theClock.startClock();
                 isRunning = true;
-            }else{
+            }
+            else{
                 outputArea.append("Clock stopped\n");
                 theClock.stopClock();
                 isRunning = false;
             }
-        }else{
+        }
+        else{
             outputArea.append("No data was entered\n");
         }
     }//GEN-LAST:event_runPauseButtonActionPerformed
@@ -304,52 +337,80 @@ public class Interface extends javax.swing.JFrame {
         if(allProcesses.isEmpty() == false){
             outputArea.append("\tSystem Status Report\n");
             outputArea.append("Time Quantum: "+Integer.toString(timeQuantum)+"\n");
+            
             getSystemTime();
+            
             outputArea.append("Current System Time: "+Integer.toString(currentTime)+"\n");
             outputArea.append("All "+allProcesses.size()+" Processes:\n");
+            
             for(int i = 0; i < allProcesses.size(); i++) {
                 outputArea.append("\t"+allProcesses.get(i).toString()+"\n");
             } //Prints every Process
+            
             outputArea.append(newProcessList.size()+" New Processes:\n");
+            
             if(newProcessList.isEmpty() == false){
+                
                 for(int i = 0; i < newProcessList.size(); i++) {
                     outputArea.append("\t"+newProcessList.get(i).toString()+"\n");
                 } //Prints every Process in New state
-            }else{
+            
+            }
+            else{
                 outputArea.append("\n");
             }
+            
             outputArea.append(readyProcessList.size()+" Processes Ready:\n");
+            
             if(readyProcessList.isEmpty() == false){
+                
                 for(int i = 0; i < readyProcessList.size(); i++) {
                     outputArea.append("\t"+readyProcessList.get(i).toString()+"\n");
                 } //Prints every Process in Ready state
-            }else{
+                
+            }
+            else{
                 outputArea.append("\n");
             }
+            
             outputArea.append("Currently Running Process:\n");
+            
             if(runningProcessList.isEmpty() == false){ //Prints the Process in Running
                 outputArea.append(runningProcessList.get(0).toString());
-            }else{
+            }
+            else{
                 outputArea.append("\n");
             }
+            
             outputArea.append(waitingProcessList.size()+" Processes Waiting:\n");
+            
             if(waitingProcessList.isEmpty() == false){
+                
                 for(int i = 0; i < waitingProcessList.size(); i++) {
                     outputArea.append("\t"+waitingProcessList.get(i).toString()+"\n");
                 }
-            }else{
+            
+            }
+            else{
                 outputArea.append("\n");
             }
+            
             outputArea.append(termProcessList.size()+" Processes Completed:\n");
+            
             if(termProcessList.isEmpty() == false){
+                
                 for(int i = 0; i < termProcessList.size(); i++) {
                     outputArea.append("\t"+termProcessList.get(i).toString()+"\n");
                 } //Prints all Terminated Processes
-            }else{
+            
+            }
+            else{
                 outputArea.append("\n");
             }
+            
             outputArea.append("\n");
-        }else{
+        }
+        else{
             outputArea.append("No data read into memory\n");
         }
     }//GEN-LAST:event_statusButtonActionPerformed
@@ -357,11 +418,14 @@ public class Interface extends javax.swing.JFrame {
         if(allProcesses.isEmpty() == false){
             outputArea.setText("Clock advanced one cycle\n");
             theClock.incrementTime();
+            
             getSystemTime();
+            
             clockDisplay.setText(Integer.toString(currentTime));
             theScheduler.loadProcesses(allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList);
             theScheduler.checkProcessStatus(currentTime);
-        }else{
+        }
+        else{
             outputArea.append("No data read into memory\n");
         } 
     }//GEN-LAST:event_clockStepButtonActionPerformed

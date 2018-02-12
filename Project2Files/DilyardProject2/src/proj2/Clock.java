@@ -29,6 +29,7 @@ public class Clock implements Runnable{
         thread = new Thread(this);
         thread.start();
     }
+    
     public void run(){
         while (true){  
             if(paused == false){
@@ -40,27 +41,35 @@ public class Clock implements Runnable{
             }
         }
     }
+    
     public void setClockSpeed(int speed){
         clockSpeed = speed;
     }
+    
     public void incrementTime(){
         currentTime++;
     }
+    
     public int getCurrentTime(){
         return currentTime;
     }
+    
     public void setCurrentTime(int ct){
         currentTime = ct;
     }
+    
     public void startClock(){
         paused = false;
     }
+    
     public void stopClock(){
         paused = true;
     }
+    
     public Boolean isPaused(){
         return paused;
     }
+    
     public void prepareScheduler(ArrayList<Process> a, ArrayList<Process> n, ArrayList<Process> r, 
             ArrayList<Process> run, ArrayList<Process> w, ArrayList<Process> t){
         allProcesses = a;
@@ -70,6 +79,7 @@ public class Clock implements Runnable{
         waitingProcessList = w;
         termProcessList = t;
     }
+    
     public static void main(String args[]) 
     {
         System.out.println("ClockStarter test code");
