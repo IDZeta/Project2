@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class Interface extends javax.swing.JFrame {
     private Clock theClock;
-    private ArrayList<Process> allP, newP, readyP, runningP, waitingP, termP;
+    private ArrayList<Process> allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList;
     private Boolean isRunning;
     private int timeQuantum, currentTime;
     private String[] splitText;
@@ -33,12 +33,12 @@ public class Interface extends javax.swing.JFrame {
         theClock = new Clock(clockDisplay);
         inputArea.setText(sampleInput);
         outputArea.setText("Output will appear here!");
-        allP = new ArrayList<Process>();
-        newP = new ArrayList<Process>();
-        readyP = new ArrayList<Process>();
-        runningP = new ArrayList<Process>();
-        waitingP = new ArrayList<Process>();
-        termP = new ArrayList<Process>();
+        allProcesses = new ArrayList<Process>();
+        newProcessList = new ArrayList<Process>();
+        readyProcessList = new ArrayList<Process>();
+        runningProcessList = new ArrayList<Process>();
+        waitingProcessList = new ArrayList<Process>();
+        termProcessList = new ArrayList<Process>();
         theScheduler = new Scheduler();
         //This Scheduler is only called when the system is manually stepped forward
         //While running on its own, the Clock's Scheduler handles the Processes
@@ -278,16 +278,16 @@ public class Interface extends javax.swing.JFrame {
                 //while, make sure their creation time hasn't been passed yet
                 String processName = splitText[i+1];
                 String processTT = splitText[i+2];
-                allP.add(new Process(processCT, processName, processTT)); 
+                allProcesses.add(new Process(processCT, processName, processTT)); 
             }
             outputArea.setText("Input data successfully read into memory\n");
         }
     }//GEN-LAST:event_readDataButtonActionPerformed
     private void runPauseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runPauseButtonActionPerformed
-        if(allP.isEmpty() == false){
+        if(allProcesses.isEmpty() == false){
             if(isRunning == false){
                 outputArea.append("Clock started\n");
-                theClock.prepareScheduler(allP, newP, readyP, runningP, waitingP, termP);
+                theClock.prepareScheduler(allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList);
                 //Loads the current states of the Processes into the Clock's Scheduler
                 theClock.startClock();
                 isRunning = true;
@@ -301,49 +301,49 @@ public class Interface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_runPauseButtonActionPerformed
     private void statusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusButtonActionPerformed
-        if(allP.isEmpty() == false){
+        if(allProcesses.isEmpty() == false){
             outputArea.append("\tSystem Status Report\n");
             outputArea.append("Time Quantum: "+Integer.toString(timeQuantum)+"\n");
             getSystemTime();
             outputArea.append("Current System Time: "+Integer.toString(currentTime)+"\n");
-            outputArea.append("All "+allP.size()+" Processes:\n");
-            for(int i = 0; i < allP.size(); i++) {
-                outputArea.append("\t"+allP.get(i).toString()+"\n");
+            outputArea.append("All "+allProcesses.size()+" Processes:\n");
+            for(int i = 0; i < allProcesses.size(); i++) {
+                outputArea.append("\t"+allProcesses.get(i).toString()+"\n");
             } //Prints every Process
-            outputArea.append(newP.size()+" New Processes:\n");
-            if(newP.isEmpty() == false){
-                for(int i = 0; i < newP.size(); i++) {
-                    outputArea.append("\t"+newP.get(i).toString()+"\n");
+            outputArea.append(newProcessList.size()+" New Processes:\n");
+            if(newProcessList.isEmpty() == false){
+                for(int i = 0; i < newProcessList.size(); i++) {
+                    outputArea.append("\t"+newProcessList.get(i).toString()+"\n");
                 } //Prints every Process in New state
             }else{
                 outputArea.append("\n");
             }
-            outputArea.append(readyP.size()+" Processes Ready:\n");
-            if(readyP.isEmpty() == false){
-                for(int i = 0; i < readyP.size(); i++) {
-                    outputArea.append("\t"+readyP.get(i).toString()+"\n");
+            outputArea.append(readyProcessList.size()+" Processes Ready:\n");
+            if(readyProcessList.isEmpty() == false){
+                for(int i = 0; i < readyProcessList.size(); i++) {
+                    outputArea.append("\t"+readyProcessList.get(i).toString()+"\n");
                 } //Prints every Process in Ready state
             }else{
                 outputArea.append("\n");
             }
             outputArea.append("Currently Running Process:\n");
-            if(runningP.isEmpty() == false){ //Prints the Process in Running
-                outputArea.append(runningP.get(0).toString());
+            if(runningProcessList.isEmpty() == false){ //Prints the Process in Running
+                outputArea.append(runningProcessList.get(0).toString());
             }else{
                 outputArea.append("\n");
             }
-            outputArea.append(waitingP.size()+" Processes Waiting:\n");
-            if(waitingP.isEmpty() == false){
-                for(int i = 0; i < waitingP.size(); i++) {
-                    outputArea.append("\t"+waitingP.get(i).toString()+"\n");
+            outputArea.append(waitingProcessList.size()+" Processes Waiting:\n");
+            if(waitingProcessList.isEmpty() == false){
+                for(int i = 0; i < waitingProcessList.size(); i++) {
+                    outputArea.append("\t"+waitingProcessList.get(i).toString()+"\n");
                 }
             }else{
                 outputArea.append("\n");
             }
-            outputArea.append(termP.size()+" Processes Completed:\n");
-            if(termP.isEmpty() == false){
-                for(int i = 0; i < termP.size(); i++) {
-                    outputArea.append("\t"+termP.get(i).toString()+"\n");
+            outputArea.append(termProcessList.size()+" Processes Completed:\n");
+            if(termProcessList.isEmpty() == false){
+                for(int i = 0; i < termProcessList.size(); i++) {
+                    outputArea.append("\t"+termProcessList.get(i).toString()+"\n");
                 } //Prints all Terminated Processes
             }else{
                 outputArea.append("\n");
@@ -354,12 +354,12 @@ public class Interface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_statusButtonActionPerformed
     private void clockStepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clockStepButtonActionPerformed
-        if(allP.isEmpty() == false){
+        if(allProcesses.isEmpty() == false){
             outputArea.setText("Clock advanced one cycle\n");
             theClock.incrementTime();
             getSystemTime();
             clockDisplay.setText(Integer.toString(currentTime));
-            theScheduler.loadProcesses(allP, newP, readyP, runningP, waitingP, termP);
+            theScheduler.loadProcesses(allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList);
             theScheduler.checkProcessStatus(currentTime);
         }else{
             outputArea.append("No data read into memory\n");
@@ -368,9 +368,9 @@ public class Interface extends javax.swing.JFrame {
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
         inputArea.setText(sampleInput);
         outputArea.setText("System reset");
-        allP.clear();
-        newP.clear();
-        readyP.clear();
+        allProcesses.clear();
+        newProcessList.clear();
+        readyProcessList.clear();
         isRunning = false;
         theClock.stopClock();
         theClock.setCurrentTime(0);

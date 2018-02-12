@@ -10,83 +10,83 @@ import java.util.*;
 
 public class Scheduler {
     
-    private ArrayList<Process> allP, newP, readyP, runningP, waitingP, termP, toSort;
+    private ArrayList<Process> allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList, listToSort;
     private int counter;
     
     public Scheduler(){
-        allP = null;
-        newP = null;
-        readyP = null;
-        runningP = null;
-        waitingP = null;
-        termP = null;
+        allProcesses = null;
+        newProcessList = null;
+        readyProcessList = null;
+        runningProcessList = null;
+        waitingProcessList = null;
+        termProcessList = null;
     }
     public void loadProcesses(ArrayList<Process> a, ArrayList<Process> n, ArrayList<Process> r, 
             ArrayList<Process> run, ArrayList<Process> w, ArrayList<Process> t){
-        this.allP = a;
-        this.newP = n;
-        this.readyP = r;
-        this.runningP = run;
-        this.waitingP = w;
-        this.termP = t;
+        this.allProcesses = a;
+        this.newProcessList = n;
+        this.readyProcessList = r;
+        this.runningProcessList = run;
+        this.waitingProcessList = w;
+        this.termProcessList = t;
     }
     public void checkProcessStatus(int ct){
         //If a Process is in New, after 1 system cycle, move it to Ready
-        if(newP.isEmpty() == false){
-            for(int i = 0; i < newP.size(); i++) {
-                Process toCheck = newP.get(i);
+        if(newProcessList.isEmpty() == false){
+            for(int i = 0; i < newProcessList.size(); i++) {
+                Process toCheck = newProcessList.get(i);
                 int creationTime = toCheck.getCreationTime();
                 if(creationTime+1 == ct){
-                    readyP.add(toCheck);   
+                    readyProcessList.add(toCheck);   
                 }
             }
-            newP.clear();
+            newProcessList.clear();
         }
         //If a Process's creation time matches the current time, move it to New
-        for(int i = 0; i < allP.size(); i++) {
-            Process toCheck = allP.get(i);
+        for(int i = 0; i < allProcesses.size(); i++) {
+            Process toCheck = allProcesses.get(i);
             int creationTime = toCheck.getCreationTime();
             if(creationTime == ct){
-                newP.add(toCheck);
+                newProcessList.add(toCheck);
             }
         }
     }
     public void checkProcessStatusTemp(int ct, int tq){
         //If nothing is Running, add something to Running
-        if(readyP.isEmpty() == false){ //Make sure there's something to add first
-            if(runningP.isEmpty() == true){
-                runningP.add(readyP.get(0));
-                readyP.remove(0);
+        if(readyProcessList.isEmpty() == false){ //Make sure there's something to add first
+            if(runningProcessList.isEmpty() == true){
+                runningProcessList.add(readyProcessList.get(0));
+                readyProcessList.remove(0);
             }else{ //If not, check how long the Process has been Running
                 counter++; //counter = number of cycles a Process has been Running
-                String runningTT = runningP.get(0).getTraceTape();
-                String[] temp = runningTT.split(" ");
-                ArrayList<String> splitTT = new ArrayList<>();
-                for(int i = 0; i < temp.length; i++) {
-                    splitTT.add(temp[i]); //An ArrayList is easier to work with
+                String runningTraceTape = runningProcessList.get(0).getTraceTape();
+                String[] tempTraceTapeCharacters = runningTraceTape.split(" ");
+                ArrayList<String> splitTraceTape = new ArrayList<>();
+                for(int i = 0; i < tempTraceTapeCharacters.length; i++) {
+                    splitTraceTape.add(tempTraceTapeCharacters[i]); //An ArrayList is easier to work with
                 } //Putting the Trace Tape into an ArrayList makes it easier to remove things
                 if(counter != tq){ //If the Time Quantum hasn't expired, check the Trace Tape
-                    int numCycles = Integer.parseInt(splitTT.get(1));
+                    int numCycles = Integer.parseInt(splitTraceTape.get(1));
                     if(numCycles < 0){ //If a C section is finished, remove it
-                        splitTT.remove(1);
-                        splitTT.remove(0);
+                        splitTraceTape.remove(1);
+                        splitTraceTape.remove(0);
                         //Now check what's left and move the Process accordingly
-                        if(splitTT.isEmpty()){ //If the Trace Tape is empty, go to Terminated
-                            termP.add(runningP.get(0));
-                            runningP.remove(0);
+                        if(splitTraceTape.isEmpty()){ //If the Trace Tape is empty, go to Terminated
+                            termProcessList.add(runningProcessList.get(0));
+                            runningProcessList.remove(0);
                             counter = 0;
-                        }else if(splitTT.get(0).equals("I")){ //If not, go to Waiting
-                            Process tempP = runningP.get(0);
+                        }else if(splitTraceTape.get(0).equals("I")){ //If not, go to Waiting
+                            Process tempP = runningProcessList.get(0);
                             String TTUpdate = null;
-                            for(int i = 0; i < splitTT.size(); i++){
-                                TTUpdate += splitTT.get(i);
-                                if(i != splitTT.size()){
+                            for(int i = 0; i < splitTraceTape.size(); i++){
+                                TTUpdate += splitTraceTape.get(i);
+                                if(i != splitTraceTape.size()){
                                     TTUpdate += " ";
                                 }
                             } //Need to update the Trace Tape first
                             tempP.setTraceTape(TTUpdate);
-                            waitingP.add(tempP);
-                            runningP.remove(0);
+                            waitingProcessList.add(tempP);
+                            runningProcessList.remove(0);
                             counter = 0;
                         }
                     }
@@ -101,31 +101,31 @@ public class Scheduler {
         //Logic for moving out of Waiting goes here...
          
         //If a Process is in New, after 1 system cycle, move it to Ready
-        if(newP.isEmpty() == false){ 
-            for(int i = 0; i < newP.size(); i++) {
-                Process toCheck = newP.get(i);
-                int creationTime = toCheck.getCreationTime();
+        if(newProcessList.isEmpty() == false){ 
+            for(int i = 0; i < newProcessList.size(); i++) {
+                Process processToCheck = newProcessList.get(i);
+                int creationTime = processToCheck.getCreationTime();
                 if(creationTime+1 == ct){
-                    toSort.add(toCheck);
+                    listToSort.add(processToCheck);
                 }
             }
-            newP.clear();
+            newProcessList.clear();
             
         }
         //If a Process's creation time matches the current time, move it to New
-        for(int i = 0; i < allP.size(); i++) {
-            Process toCheck = allP.get(i);
+        for(int i = 0; i < allProcesses.size(); i++) {
+            Process toCheck = allProcesses.get(i);
             int creationTime = toCheck.getCreationTime();
             if(creationTime == ct){
-                newP.add(toCheck);
+                newProcessList.add(toCheck);
             }
         }
         //Sort everything moving into Ready
-//        if(toSort.size() > 1){
-//            sortProcessList(toSort);
+//        if(listToSort.size() > 1){
+//            sortProcessList(listToSort);
 //        }
-//        for(int i = 0; i < toSort.size(); i++) {
-//            readyP.add(toSort[i]);
+//        for(int i = 0; i < listToSort.size(); i++) {
+//            readyProcessList.add(listToSort[i]);
 //        }
     }
 }

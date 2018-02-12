@@ -17,7 +17,7 @@ public class Clock implements Runnable{
     private int clockSpeed;
     private Boolean paused;
     private JLabel label;
-    private ArrayList<Process> allP, newP, readyP, runningP, waitingP, termP;
+    private ArrayList<Process> allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList;
     private Scheduler theScheduler;
     
     public Clock(JLabel theLabel){  
@@ -32,7 +32,7 @@ public class Clock implements Runnable{
     public void run(){
         while (true){  
             if(paused == false){
-                theScheduler.loadProcesses(allP, newP, readyP, runningP, waitingP, termP);
+                theScheduler.loadProcesses(allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList);
                 incrementTime();
                 label.setText(Integer.toString(currentTime));
                 theScheduler.checkProcessStatus(currentTime);
@@ -63,12 +63,12 @@ public class Clock implements Runnable{
     }
     public void prepareScheduler(ArrayList<Process> a, ArrayList<Process> n, ArrayList<Process> r, 
             ArrayList<Process> run, ArrayList<Process> w, ArrayList<Process> t){
-        allP = a;
-        newP = n;
-        readyP = r;
-        runningP = run;
-        waitingP = w;
-        termP = t;
+        allProcesses = a;
+        newProcessList = n;
+        readyProcessList = r;
+        runningProcessList = run;
+        waitingProcessList = w;
+        termProcessList = t;
     }
     public static void main(String args[]) 
     {
