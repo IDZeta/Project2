@@ -301,7 +301,7 @@ public class Interface extends javax.swing.JFrame {
             
             if(isRunning == false){
                 outputArea.append("Clock started\n");
-                theClock.prepareScheduler(allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList);
+                theClock.prepareScheduler(allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList, timeQuantum);
                 //Loads the current states of the Processes into the Clock's Scheduler
                 theClock.startClock();
                 isRunning = true;
@@ -371,7 +371,7 @@ public class Interface extends javax.swing.JFrame {
     private void clockStepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clockStepButtonActionPerformed
         if(allProcesses.isEmpty() == false){
             outputArea.setText("Clock advanced one cycle\n");
-            theClock.prepareScheduler(allP, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList, timeQuantum);
+            theClock.prepareScheduler(allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList, timeQuantum);
             theClock.incrementTime();
             getSystemTime();
         }else{
