@@ -38,8 +38,8 @@ public class Clock implements Runnable{
             if(paused == false){
                 incrementTime();
                 label.setText(Integer.toString(currentTime));
-                try{ Thread.sleep(clockSpeed); } catch (Exception e) {}
             }
+            try{ Thread.sleep(clockSpeed); } catch (Exception e) {}
         }
     }
     public void setClockSpeed(int speed){
