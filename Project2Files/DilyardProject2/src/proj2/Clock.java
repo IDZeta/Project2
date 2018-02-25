@@ -21,12 +21,12 @@ public class Clock implements Runnable{
     private Boolean paused;
     private JLabel label;
     private ArrayList<Process> allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList;
-    private Scheduler theScheduler;
+    private SchedulerFull theScheduler;
     
     public Clock(JLabel theLabel){  
         currentTime = 0;
         label = theLabel;
-        theScheduler = new Scheduler();
+        theScheduler = new SchedulerFull();
         clockSpeed = 1000;
         paused = true;
         timeQuantum = 0;

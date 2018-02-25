@@ -134,13 +134,32 @@ public class Interface extends javax.swing.JFrame {
     }
     
     public void setStateDiagramValues()
-    {
-        while(true)
-        {    
-            for(int i = 0; i < newProcessList.size(); i++)
-            {
-                newProcessTextArea.append(newProcessList.get(i).toString());
-            }
+    {  
+        newProcessTextArea.setText("");
+        readyTextArea.setText("");
+        runningTextArea.setText("");
+        waitingTextArea.setText("");
+        terminatedTextArea.setText("");
+        
+        for(int i = 0; i < newProcessList.size(); i++)
+        {
+            newProcessTextArea.append(newProcessList.get(i).toString() + "\n");
+        }
+        for(int i = 0; i < readyProcessList.size(); i++)
+        {
+            readyTextArea.append(readyProcessList.get(i).toString() + "\n");
+        }
+        for(int i = 0; i < runningProcessList.size(); i++)
+        {
+            runningTextArea.append(runningProcessList.get(i).toString() + "\n");
+        }
+        for(int i = 0; i < waitingProcessList.size(); i++)
+        {
+            waitingTextArea.append(waitingProcessList.get(i).toString() + "\n");
+        }
+        for(int i = 0; i < termProcessList.size(); i++)
+        {
+            terminatedTextArea.append(termProcessList.get(i).toString() + "\n");
         }
     }
     /**
@@ -478,9 +497,11 @@ public class Interface extends javax.swing.JFrame {
             theClock.incrementTime();
             getSystemTime();
             clockDisplay.setText(Integer.toString(currentTime));
+            setStateDiagramValues();
         }else{
             outputArea.append("No data read into memory\n");
         } 
+        
     }//GEN-LAST:event_clockStepButtonActionPerformed
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
         inputArea.setText(sampleInput);
