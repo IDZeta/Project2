@@ -29,7 +29,7 @@ public class Interface extends javax.swing.JFrame {
     public Interface() {
         initComponents();
         isRunning = false;
-        theClock = new Clock(clockDisplay);
+        theClock = new Clock(clockDisplay, this);
         inputArea.setText(sampleInput);
         outputArea.setText("Output will appear here!");
         allProcesses = new ArrayList<Process>();

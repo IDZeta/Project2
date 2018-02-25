@@ -22,10 +22,12 @@ public class Clock implements Runnable{
     private JLabel label;
     private ArrayList<Process> allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList;
     private SchedulerFull theScheduler;
+    private Interface processInterface;
     
-    public Clock(JLabel theLabel){  
+    public Clock(JLabel theLabel, Interface i){  
         currentTime = 0;
         label = theLabel;
+        processInterface = i;
         theScheduler = new SchedulerFull();
         clockSpeed = 1000;
         paused = true;
@@ -38,6 +40,7 @@ public class Clock implements Runnable{
             if(paused == false){
                 incrementTime();
                 label.setText(Integer.toString(currentTime));
+                processInterface.setStateDiagramValues();
             }
             try{ Thread.sleep(clockSpeed); } catch (Exception e) {}
         }
