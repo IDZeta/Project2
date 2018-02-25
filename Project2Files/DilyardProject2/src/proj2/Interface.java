@@ -132,6 +132,17 @@ public class Interface extends javax.swing.JFrame {
         //The Try/Catch model for this code was found here:
         //https://study.com/academy/lesson/how-to-check-if-a-string-is-an-integer-in-java.html
     }
+    
+    public void setStateDiagramValues()
+    {
+        while(true)
+        {    
+            for(int i = 0; i < newProcessList.size(); i++)
+            {
+                newProcessTextArea.append(newProcessList.get(i).toString());
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -143,8 +154,6 @@ public class Interface extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         inputArea = new javax.swing.JTextArea();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        instructionsPanel = new javax.swing.JTextArea();
         clockDisplay = new javax.swing.JLabel();
         readDataButton = new javax.swing.JButton();
         runPauseButton = new javax.swing.JButton();
@@ -154,6 +163,23 @@ public class Interface extends javax.swing.JFrame {
         clockStepButton = new javax.swing.JButton();
         currentTimeLabel = new javax.swing.JLabel();
         resetButton = new javax.swing.JButton();
+        lblInput = new javax.swing.JLabel();
+        lblOutput = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        newProcessTextArea = new javax.swing.JTextArea();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        readyTextArea = new javax.swing.JTextArea();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        terminatedTextArea = new javax.swing.JTextArea();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        runningTextArea = new javax.swing.JTextArea();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        waitingTextArea = new javax.swing.JTextArea();
+        lblReady = new javax.swing.JLabel();
+        lblNewState = new javax.swing.JLabel();
+        lblTerminated = new javax.swing.JLabel();
+        lblRunning = new javax.swing.JLabel();
+        lblWaiting = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -161,15 +187,6 @@ public class Interface extends javax.swing.JFrame {
         inputArea.setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
         inputArea.setRows(5);
         jScrollPane1.setViewportView(inputArea);
-
-        instructionsPanel.setEditable(false);
-        instructionsPanel.setColumns(20);
-        instructionsPanel.setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
-        instructionsPanel.setLineWrap(true);
-        instructionsPanel.setRows(5);
-        instructionsPanel.setText("Instructions:\nEnter each piece of data on a new line. Enter the time quantum first, then input the data for each process in the following format. An example of this format is in the upper text field:\n<process creation time>\n<process name>\n<trace tape>\nAfter entering all processes, hit \"Read Data\". To start or stop the system clock, hit \"Run/Pause\". To manually step the clock forward once, hit \"Advance Clock Once\". To check the state of the system, his \"Check System Status\". To completely reset the system (clock and memory), hit \"Reset System\".");
-        instructionsPanel.setWrapStyleWord(true);
-        jScrollPane2.setViewportView(instructionsPanel);
 
         clockDisplay.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         clockDisplay.setText("0");
@@ -218,6 +235,40 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
+        lblInput.setText("Input:");
+
+        lblOutput.setText("Output:");
+
+        newProcessTextArea.setColumns(20);
+        newProcessTextArea.setRows(5);
+        jScrollPane2.setViewportView(newProcessTextArea);
+
+        readyTextArea.setColumns(20);
+        readyTextArea.setRows(5);
+        jScrollPane4.setViewportView(readyTextArea);
+
+        terminatedTextArea.setColumns(20);
+        terminatedTextArea.setRows(5);
+        jScrollPane5.setViewportView(terminatedTextArea);
+
+        runningTextArea.setColumns(20);
+        runningTextArea.setRows(5);
+        jScrollPane6.setViewportView(runningTextArea);
+
+        waitingTextArea.setColumns(20);
+        waitingTextArea.setRows(5);
+        jScrollPane7.setViewportView(waitingTextArea);
+
+        lblReady.setText("Ready State:");
+
+        lblNewState.setText("New State:");
+
+        lblTerminated.setText("Terminated State:");
+
+        lblRunning.setText("Running State:");
+
+        lblWaiting.setText("Waiting State:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -225,52 +276,103 @@ public class Interface extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblInput, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
+                            .addComponent(jScrollPane3))
+                        .addGap(29, 29, 29)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(readDataButton)
+                                    .addGap(57, 57, 57)
+                                    .addComponent(currentTimeLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(clockDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(clockStepButton)
+                                                        .addComponent(statusButton)
+                                                        .addComponent(resetButton))
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                    .addComponent(runPauseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGap(41, 41, 41)))
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(lblNewState, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(lblReady, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGap(10, 10, 10)))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(lblTerminated, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblRunning, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane6))))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(readDataButton)
-                                .addGap(57, 57, 57)
-                                .addComponent(currentTimeLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(clockDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(runPauseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(clockStepButton)
-                            .addComponent(statusButton)
-                            .addComponent(resetButton))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(254, 254, 254)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblWaiting, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addGap(159, 159, 159))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(lblInput, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblOutput)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(readDataButton)
                             .addComponent(currentTimeLabel)
                             .addComponent(clockDisplay))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(runPauseButton)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(runPauseButton)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(lblNewState)
+                                .addComponent(lblTerminated)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(clockStepButton)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(clockStepButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(statusButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(resetButton))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+                            .addComponent(jScrollPane5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblRunning)
+                            .addComponent(lblReady))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(statusButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(resetButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(20, 20, 20))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+                            .addComponent(jScrollPane4))
+                        .addGap(18, 18, 18)
+                        .addComponent(lblWaiting)
+                        .addGap(7, 7, 7)
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 26, Short.MAX_VALUE))
         );
 
         pack();
@@ -295,6 +397,7 @@ public class Interface extends javax.swing.JFrame {
             
             outputArea.setText("Input data successfully read into memory\n");
         }
+        //setStateDiagramValues();
     }//GEN-LAST:event_readDataButtonActionPerformed
     private void runPauseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runPauseButtonActionPerformed
         if(allProcesses.isEmpty() == false){
@@ -374,6 +477,7 @@ public class Interface extends javax.swing.JFrame {
             theClock.prepareScheduler(allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList, timeQuantum);
             theClock.incrementTime();
             getSystemTime();
+            clockDisplay.setText(Integer.toString(currentTime));
         }else{
             outputArea.append("No data read into memory\n");
         } 
@@ -430,14 +534,29 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JButton clockStepButton;
     private javax.swing.JLabel currentTimeLabel;
     private javax.swing.JTextArea inputArea;
-    private javax.swing.JTextArea instructionsPanel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JLabel lblInput;
+    private javax.swing.JLabel lblNewState;
+    private javax.swing.JLabel lblOutput;
+    private javax.swing.JLabel lblReady;
+    private javax.swing.JLabel lblRunning;
+    private javax.swing.JLabel lblTerminated;
+    private javax.swing.JLabel lblWaiting;
+    private javax.swing.JTextArea newProcessTextArea;
     private javax.swing.JTextArea outputArea;
     private javax.swing.JButton readDataButton;
+    private javax.swing.JTextArea readyTextArea;
     private javax.swing.JButton resetButton;
     private javax.swing.JButton runPauseButton;
+    private javax.swing.JTextArea runningTextArea;
     private javax.swing.JButton statusButton;
+    private javax.swing.JTextArea terminatedTextArea;
+    private javax.swing.JTextArea waitingTextArea;
     // End of variables declaration//GEN-END:variables
 }
