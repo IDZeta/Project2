@@ -33,7 +33,7 @@ public class Clock implements Runnable{
         clockSpeed = 1000;
         paused = true;
         timeQuantum = 0;
-        rules = null;
+        rules = "NRW";
         thread = new Thread(this);
         thread.start();
     }
@@ -86,6 +86,5 @@ public class Clock implements Runnable{
     public static void main(String args[]) 
     {
         System.out.println("ClockStarter test code");
-        //simpleClock theClock = new simpleClock();  
     }
 }

@@ -513,6 +513,7 @@ public class Interface extends javax.swing.JFrame {
             
             if(isRunning == false){
                 outputArea.append("Clock started\n");
+                theClock.setRules(cmbMultipleStatesEnteringWaiting.getSelectedItem().toString());
                 theClock.prepareScheduler(allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList, timeQuantum);
                 //Loads the current states of the Processes into the Clock's Scheduler
                 theClock.startClock();
