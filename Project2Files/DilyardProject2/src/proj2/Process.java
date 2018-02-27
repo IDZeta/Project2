@@ -6,6 +6,8 @@
  */
 package proj2;
 
+import java.util.Comparator;
+
 public class Process implements Comparable<Process>{
     
     private int creationTime;

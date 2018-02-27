@@ -53,7 +53,7 @@ public class Clock implements Runnable{
     public void incrementTime(){
         theScheduler.loadProcesses(allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList);
         currentTime++;
-        theScheduler.checkProcesses(currentTime, timeQuantum, rules);
+        theScheduler.checkProcesses(currentTime, timeQuantum, order);
     }
     public int getCurrentTime(){
         return currentTime;

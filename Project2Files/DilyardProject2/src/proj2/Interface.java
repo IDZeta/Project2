@@ -509,11 +509,10 @@ public class Interface extends javax.swing.JFrame {
         //setStateDiagramValues();
     }//GEN-LAST:event_readDataButtonActionPerformed
     private void runPauseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runPauseButtonActionPerformed
-        if(allProcesses.isEmpty() == false){
-            
+        if(allProcesses.isEmpty() == false){        
             if(isRunning == false){
                 outputArea.append("Clock started\n");
-                theClock.setRules(cmbMultipleStatesEnteringWaiting.getSelectedItem().toString());
+                theClock.setMultiProcessRule(cmbMultipleStatesEnteringWaiting.getSelectedItem().toString());
                 theClock.prepareScheduler(allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList, timeQuantum);
                 //Loads the current states of the Processes into the Clock's Scheduler
                 theClock.startClock();
@@ -582,6 +581,7 @@ public class Interface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_statusButtonActionPerformed
     private void clockStepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clockStepButtonActionPerformed
+        theClock.setMultiProcessRule(cmbMultipleStatesEnteringWaiting.getSelectedItem().toString());
         if(allProcesses.isEmpty() == false){
             outputArea.setText("Clock advanced one cycle\n");
             theClock.prepareScheduler(allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList, timeQuantum);
