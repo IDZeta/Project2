@@ -15,14 +15,15 @@ public class Simulator{
             runningProcessList, waitingProcessList, termProcessList, enteringReadyList,
             exitingWaitingList, exitingNewList;
     private int runningCounter;
-    public String rule;
+    public String waitRule, admitRule;
     
     public Simulator(){
         enteringReadyList = new ArrayList<Process>();
         exitingWaitingList = new ArrayList<Process>();
         exitingNewList = new ArrayList<Process>();
         runningCounter = -1;
-        rule = null;
+        waitRule = null;
+        admitRule = null;
     }
     public void loadProcesses(ArrayList<Process> a, ArrayList<Process> n, ArrayList<Process> r, 
             ArrayList<Process> run, ArrayList<Process> w, ArrayList<Process> t){
@@ -167,7 +168,7 @@ public class Simulator{
                 }
             }
         }
-        sortList(exitingWaitingList, rule);
+        sortList(exitingWaitingList, waitRule);
         enteringReadyList.addAll(exitingWaitingList);
         exitingWaitingList.clear();
     }
@@ -182,7 +183,7 @@ public class Simulator{
                 }
             }
             newProcessList.clear();
-            sortList(exitingNewList, rule);
+            sortList(exitingNewList, admitRule);
             enteringReadyList.addAll(exitingNewList);
             exitingNewList.clear();
         }

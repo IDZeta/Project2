@@ -512,7 +512,9 @@ public class Interface extends javax.swing.JFrame {
         if(allProcesses.isEmpty() == false){        
             if(isRunning == false){
                 outputArea.append("Clock started\n");
-                theClock.setMultiProcessRule(cmbMultipleStatesEnteringWaiting.getSelectedItem().toString());
+                theClock.setOrder(cmbMultipleStatesEnteringWaiting.getSelectedItem().toString());
+                theClock.setWaitRule(cmbExitingWaitingSameTime.getSelectedItem().toString());
+                theClock.setAdmitRule(cmbAdmittedSameTime.getSelectedItem().toString());
                 theClock.prepareScheduler(allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList, timeQuantum);
                 //Loads the current states of the Processes into the Clock's Scheduler
                 theClock.startClock();
@@ -581,7 +583,9 @@ public class Interface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_statusButtonActionPerformed
     private void clockStepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clockStepButtonActionPerformed
-        theClock.setMultiProcessRule(cmbMultipleStatesEnteringWaiting.getSelectedItem().toString());
+        theClock.setOrder(cmbMultipleStatesEnteringWaiting.getSelectedItem().toString());
+        theClock.setWaitRule(cmbExitingWaitingSameTime.getSelectedItem().toString());
+        theClock.setAdmitRule(cmbAdmittedSameTime.getSelectedItem().toString());
         if(allProcesses.isEmpty() == false){
             outputArea.setText("Clock advanced one cycle\n");
             theClock.prepareScheduler(allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList, timeQuantum);

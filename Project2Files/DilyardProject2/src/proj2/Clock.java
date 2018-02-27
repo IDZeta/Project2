@@ -83,8 +83,11 @@ public class Clock implements Runnable{
     public void setOrder(String o){
         order = o;
     }
-    public void setMultiProcessRule(String r){
-        theScheduler.rule = r;
+    public void setAdmitRule(String r){
+        theScheduler.admitRule = r;
+    }
+     public void setWaitRule(String r){
+        theScheduler.waitRule = r;
     }
     public static void main(String args[]) 
     {
