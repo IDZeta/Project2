@@ -139,17 +139,17 @@ public class Simulator{
         }
     }
     public void checkWaitingProcesses(){
-         //If at least one Process is in Waiting, see if it's done Waiting
+        //If at least one Process is in Waiting, see if it's done Waiting
         if(waitingProcessList.isEmpty() == false){
-            String waitingTraceTape = waitingProcessList.get(0).getTraceTape();
-            String[] tempTraceTapeCharacters = waitingTraceTape.split(" ");
-            //Putting the Trace Tape into an ArrayList makes it easier to remove things
-            ArrayList<String> splitTraceTape = new ArrayList<>();
-            for(int i = 0; i < tempTraceTapeCharacters.length; i++) {
-                splitTraceTape.add(tempTraceTapeCharacters[i]);
-            }
-            //Check how long each Process has been Waiting
-            for(int i = 0; i < waitingProcessList.size(); i++) {
+            for(int i = 0; i < waitingProcessList.size(); i++){
+               String waitingTraceTape = waitingProcessList.get(i).getTraceTape();
+                String[] tempTraceTapeCharacters = waitingTraceTape.split(" ");
+                //Putting the Trace Tape into an ArrayList makes it easier to remove things
+                ArrayList<String> splitTraceTape = new ArrayList<>();
+                for(int j = 0; j < tempTraceTapeCharacters.length; j++) {
+                    splitTraceTape.add(tempTraceTapeCharacters[j]);
+                } 
+                //Check how long each Process has been Waiting
                 int waitCyclesLeft = Integer.parseInt(splitTraceTape.get(1));
                 System.out.println("A Process in Waiting has "+waitCyclesLeft+" cycles left");
                 if(waitCyclesLeft > 0){
@@ -166,9 +166,9 @@ public class Simulator{
                     waitingProcessList.remove(i);
                     i--; //Ensures that a member of the list isn't skipped when something is removed
                 }
-            }
+            } 
         }
-        sortList(exitingWaitingList, waitRule);
+        sortList(exitingWaitingList, rule);
         enteringReadyList.addAll(exitingWaitingList);
         exitingWaitingList.clear();
     }
@@ -197,25 +197,27 @@ public class Simulator{
         }
     }
     public void checkProcesses(int ct, int tq, String order){
-        if(order.equals("NRW")){
-            checkNewProcesses(ct);
-            checkRunningProcess(tq);
-            checkWaitingProcesses();
-        }
-        else if(order.equals("NWR")){
-            checkNewProcesses(ct);
-            checkWaitingProcesses();
-            checkRunningProcess(tq);
-        }
-        else if(order.equals("WNR")){
-            checkWaitingProcesses();
-            checkNewProcesses(ct);
-            checkRunningProcess(tq);
-        }
-        else if(order.equals("WRN")){
-            checkWaitingProcesses();
-            checkRunningProcess(tq);
-            checkNewProcesses(ct);
+        switch (order) {
+            case "NRW":
+                checkNewProcesses(ct);
+                checkRunningProcess(tq);
+                checkWaitingProcesses();
+                break;
+            case "NWR":
+                checkNewProcesses(ct);
+                checkWaitingProcesses();
+                checkRunningProcess(tq);
+                break;
+            case "WNR":
+                checkWaitingProcesses();
+                checkNewProcesses(ct);
+                checkRunningProcess(tq);
+                break;
+            case "WRN":
+                checkWaitingProcesses();
+                checkRunningProcess(tq);
+                checkNewProcesses(ct);
+                break;
         }
         readyProcessList.addAll(enteringReadyList);
         enteringReadyList.clear();
