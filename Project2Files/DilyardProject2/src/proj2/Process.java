@@ -45,9 +45,34 @@ public class Process implements Comparable<Process>{
         String output = this.creationTime+" :: "+this.name+" :: "+this.traceTape;
         return output;
     }
-    
-    public int compareTo(Process toCompare){
-        int compareTime = toCompare.getCreationTime();
+    @Override
+    public int compareTo(Process p1){
+        int compareTime = p1.getCreationTime();
         return this.creationTime - compareTime;
+        //Sorts Processes in ascending order by Creation Time
     }
+    public static Comparator<Process> sortCTReverse = new Comparator<Process>(){
+        @Override
+        public int compare(Process p1, Process p2){
+            int p1CT = p1.getCreationTime();
+            int p2CT = p2.getCreationTime();
+            return p2CT - p1CT;
+        }
+    };
+    public static Comparator<Process> sortAlphabetically = new Comparator<Process>(){
+        @Override
+        public int compare(Process p1, Process p2) {
+            String name1 = p1.getName();
+            String name2 = p2.getName();
+            return name1.compareTo(name2);
+        }
+    };
+    public static Comparator<Process> sortAlphabeticallyReverse = new Comparator<Process>(){
+        @Override
+        public int compare(Process p1, Process p2) {
+            String name1 = p1.getName();
+            String name2 = p2.getName();
+            return name2.compareTo(name1);
+        }
+    };
 }
