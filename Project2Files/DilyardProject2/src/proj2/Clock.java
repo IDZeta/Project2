@@ -19,7 +19,7 @@ public class Clock implements Runnable{
     private Thread thread;
     private int currentTime, clockSpeed, timeQuantum;
     private Boolean paused;
-    private String rules;
+    private String order;
     private JLabel label;
     private ArrayList<Process> allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList;
     private Simulator theScheduler;
@@ -33,7 +33,7 @@ public class Clock implements Runnable{
         clockSpeed = 1000;
         paused = true;
         timeQuantum = 0;
-        rules = "NRW";
+        order = null;
         thread = new Thread(this);
         thread.start();
     }
@@ -80,8 +80,11 @@ public class Clock implements Runnable{
         termProcessList = t;
         timeQuantum = tq;
     }
-    public void setRules(String r){
-        rules = r;
+    public void setOrder(String o){
+        order = o;
+    }
+    public void setMultiProcessRule(String r){
+        theScheduler.rule = r;
     }
     public static void main(String args[]) 
     {
