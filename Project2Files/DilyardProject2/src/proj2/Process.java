@@ -47,6 +47,17 @@ public class Process implements Comparable<Process>{
         String output = this.creationTime+" :: "+this.name+" :: "+this.traceTape;
         return output;
     }
+    public int findProcessIndex(ArrayList<Process> all){
+        int index = 0;
+        String pName = this.name;
+        for (int i = 0; i < all.size(); i++) {
+            String nameToCompare = all.get(i).getName();
+            if(nameToCompare.equals(pName)){
+                index = i;
+            }
+        }
+        return index;
+    }
     @Override
     public int compareTo(Process p1){
         int compareTime = p1.getCreationTime();
