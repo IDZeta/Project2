@@ -15,12 +15,14 @@ public class Simulator{
             runningProcessList, waitingProcessList, termProcessList, enteringReadyList,
             exitingWaitingList, exitingNewList;
     private int runningCounter;
+    private ArrayList<Integer> waitingArrivalTimeList;
     public String waitRule, admitRule;
     
     public Simulator(){
         enteringReadyList = new ArrayList<Process>();
         exitingWaitingList = new ArrayList<Process>();
         exitingNewList = new ArrayList<Process>();
+        waitingArrivalTimeList = new ArrayList<Integer>();
         runningCounter = -1;
         waitRule = null;
         admitRule = null;
@@ -46,12 +48,35 @@ public class Simulator{
         p.setTraceTape(TTUpdate);
     }
     public void sortList(ArrayList<Process> list, String rule){
+        //This method determines how multiple Processes exiting a state are sorted
         if(list.isEmpty() == false && list.size() > 1){
-            switch (rule) {
+            switch(rule){
                 case "dataOrder":
+                    ArrayList<Process> temp1 = new ArrayList<Process>();
+                    for (int i = 0; i < list.size(); i++) {
+                        temp1.add(null);
+                    }
+                    for(int i = 0; i < list.size(); i++){
+                        int index = list.get(i).findProcessIndex(allProcesses);
+                        temp1.set(index, list.get(i));
+                    }
+                    list.clear();
+                    list.addAll(temp1);
+                case "dataOrderReverse":
+                    ArrayList<Process> temp2 = new ArrayList<Process>();
+                    for (int i = 0; i < list.size(); i++) {
+                        temp2.add(null);
+                    }
+                    for(int i = 0; i < list.size(); i++){
+                        int index = list.get(i).findProcessIndex(allProcesses);
+                        temp2.set((list.size()-1)-index, list.get(i));
+                    }
+                    list.clear();
+                    list.addAll(temp2);
+                case "creationTime":
                     Collections.sort(list);
                     break;
-                case "dataOrderReverse":
+                case "creationTimeReverse":
                     Collections.sort(list, Process.sortCTReverse);
                     break;
                 case "alphabetical":
@@ -63,16 +88,10 @@ public class Simulator{
             }
         } 
     }
-    public void checkRunningProcess(int tq){
-        //If nothing is Running, add something to Running
-        if(readyProcessList.isEmpty() == false && runningProcessList.isEmpty() == true){
-            runningProcessList.add(readyProcessList.get(0));
-            readyProcessList.remove(0);
-        }
-        //If not, check how long the Process has been Running
+    public void checkRunningProcess(int tq, int ct){
+        //Check how long the Process has been Running, if there is one
         if(runningProcessList.isEmpty() == false){
             runningCounter++; //counter = number of cycles a Process has been Running
-            System.out.println("A Process has been Running for "+runningCounter+" cycles");
             String runningTraceTape = runningProcessList.get(0).getTraceTape();
             String[] tempTraceTapeCharacters = runningTraceTape.split(" ");
             //Putting the Trace Tape into an ArrayList makes it easier to remove things
@@ -83,10 +102,9 @@ public class Simulator{
             int runCyclesLeft = Integer.parseInt(splitTraceTape.get(1));
             //If the Time Quantum hasn't expired, check the Trace Tape
             if(runningCounter != tq+1){  
-                System.out.println("\t\tnumCycles "+runCyclesLeft);
+                //System.out.println("\tnumCycles "+runCyclesLeft);
                 //If a "C _" block is finished, remove it
                 if(runCyclesLeft == 0){
-                    System.out.println("\tThe Running Process is done using the CPU");
                     splitTraceTape.remove(1);
                     splitTraceTape.remove(0);
                     //Now check what's left of the Trace Tape and move the Process accordingly
@@ -102,12 +120,12 @@ public class Simulator{
                         Process tempP = runningProcessList.get(0);
                         rebuildTraceTape(splitTraceTape, tempP);
                         waitingProcessList.add(tempP);
+                        waitingArrivalTimeList.add(ct);
                         runningProcessList.remove(0);
                         runningCounter = -1;
-                        System.out.println("\tThe Running Process moved to Waiting");
+                        System.out.println("The Running Process moved to Waiting");
                     }
                 }else{ //If not finished with the CPU, decrement the number of cycles left
-                    System.out.println("\tThe Running Process needs more time");
                     if(runningCounter != 0){
                         runCyclesLeft--;
                     }
@@ -123,10 +141,10 @@ public class Simulator{
                     splitTraceTape.remove(0);
                     rebuildTraceTape(splitTraceTape, runningProcessList.get(0));
                     waitingProcessList.add(runningProcessList.get(0));
+                    waitingArrivalTimeList.add(ct);
                     runningProcessList.remove(0);
                     runningCounter = -1;
                 }else{
-                    System.out.println("\tThe Time Quantum has expired");
                     //Update the Trace Tape first
                     Process tempP = runningProcessList.get(0);
                     rebuildTraceTape(splitTraceTape, tempP);
@@ -137,12 +155,18 @@ public class Simulator{
                 }
             }
         }
+        //If nothing is Running, add something to Running
+        if(readyProcessList.isEmpty() == false && runningProcessList.isEmpty() == true){
+            runningProcessList.add(readyProcessList.get(0));
+            readyProcessList.remove(0);
+            runningCounter++;
+        }
     }
-    public void checkWaitingProcesses(){
+    public void checkWaitingProcesses(int ct){
         //If at least one Process is in Waiting, see if it's done Waiting
         if(waitingProcessList.isEmpty() == false){
             for(int i = 0; i < waitingProcessList.size(); i++){
-               String waitingTraceTape = waitingProcessList.get(i).getTraceTape();
+                String waitingTraceTape = waitingProcessList.get(i).getTraceTape();
                 String[] tempTraceTapeCharacters = waitingTraceTape.split(" ");
                 //Putting the Trace Tape into an ArrayList makes it easier to remove things
                 ArrayList<String> splitTraceTape = new ArrayList<>();
@@ -151,19 +175,23 @@ public class Simulator{
                 } 
                 //Check how long each Process has been Waiting
                 int waitCyclesLeft = Integer.parseInt(splitTraceTape.get(1));
-                System.out.println("A Process in Waiting has "+waitCyclesLeft+" cycles left");
+                int timeArrived = waitingArrivalTimeList.get(i);
+                //System.out.println("A Process in Waiting has "+waitCyclesLeft+" cycles left");
                 if(waitCyclesLeft > 0){
                     //If an "I _" block isn't finished, decrement the time remaining
-                    waitCyclesLeft--;
+                    if(timeArrived-ct != 0){
+                        waitCyclesLeft--;
+                    }
                     splitTraceTape.set(1, Integer.toString(waitCyclesLeft));
                     rebuildTraceTape(splitTraceTape, waitingProcessList.get(i));
                 }else{ //If it IS finished, remove that block and move the Process into Ready
-                    System.out.println("\tA Process is done Waiting");
+                    System.out.println("A Process is done Waiting");
                     splitTraceTape.remove(1);
                     splitTraceTape.remove(0);
                     rebuildTraceTape(splitTraceTape, waitingProcessList.get(i));
                     exitingWaitingList.add(waitingProcessList.get(i));
                     waitingProcessList.remove(i);
+                    waitingArrivalTimeList.remove(i);
                     i--; //Ensures that a member of the list isn't skipped when something is removed
                 }
             } 
@@ -197,25 +225,25 @@ public class Simulator{
         }
     }
     public void checkProcesses(int ct, int tq, String order){
-        switch (order) {
+        switch(order){ //order determines what clump of Processes is handled first
             case "NRW":
                 checkNewProcesses(ct);
-                checkRunningProcess(tq);
-                checkWaitingProcesses();
+                checkRunningProcess(tq, ct);
+                checkWaitingProcesses(ct);
                 break;
             case "NWR":
                 checkNewProcesses(ct);
-                checkWaitingProcesses();
-                checkRunningProcess(tq);
+                checkWaitingProcesses(ct);
+                checkRunningProcess(tq, ct);
                 break;
             case "WNR":
-                checkWaitingProcesses();
+                checkWaitingProcesses(ct);
                 checkNewProcesses(ct);
-                checkRunningProcess(tq);
+                checkRunningProcess(tq, ct);
                 break;
             case "WRN":
-                checkWaitingProcesses();
-                checkRunningProcess(tq);
+                checkWaitingProcesses(ct);
+                checkRunningProcess(tq, ct);
                 checkNewProcesses(ct);
                 break;
         }
