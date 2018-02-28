@@ -168,7 +168,7 @@ public class Simulator{
                 }
             } 
         }
-        sortList(exitingWaitingList, rule);
+        sortList(exitingWaitingList, waitRule);
         enteringReadyList.addAll(exitingWaitingList);
         exitingWaitingList.clear();
     }
