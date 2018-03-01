@@ -489,11 +489,9 @@ public class Interface extends javax.swing.JFrame {
         waitingTextArea.setText("");
         terminatedTextArea.setText("");
         splitText = input.split("\n");
-        
         if(isInputDataValid() == true){ //isInputDataValid() does ALL sanity checks at once
             outputArea.setText("The data you entered is formatted correctly\n");
             timeQuantum = Integer.parseInt(splitText[0]);
-            
             //If any slots were shifted up, ignore slots at the end
             for(int i = 1; i < splitText.length-counter; i += 3){
                 int processCT = Integer.parseInt(splitText[i])+currentTime;
@@ -503,8 +501,10 @@ public class Interface extends javax.swing.JFrame {
                 String processTT = splitText[i+2];
                 allProcesses.add(new Process(processCT, processName, processTT)); 
             }
-            
             outputArea.setText("Input data successfully read into memory\n");
+            theClock.setOrder(cmbMultipleStatesEnteringWaiting.getSelectedItem().toString());
+            theClock.setWaitRule(cmbExitingWaitingSameTime.getSelectedItem().toString());
+            theClock.setAdmitRule(cmbAdmittedSameTime.getSelectedItem().toString());
         }
         //setStateDiagramValues();
     }//GEN-LAST:event_readDataButtonActionPerformed
@@ -512,9 +512,6 @@ public class Interface extends javax.swing.JFrame {
         if(allProcesses.isEmpty() == false){        
             if(isRunning == false){
                 outputArea.append("Clock started\n");
-                theClock.setOrder(cmbMultipleStatesEnteringWaiting.getSelectedItem().toString());
-                theClock.setWaitRule(cmbExitingWaitingSameTime.getSelectedItem().toString());
-                theClock.setAdmitRule(cmbAdmittedSameTime.getSelectedItem().toString());
                 theClock.prepareScheduler(allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList, timeQuantum);
                 //Loads the current states of the Processes into the Clock's Scheduler
                 theClock.startClock();
@@ -532,19 +529,22 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_runPauseButtonActionPerformed
     private void statusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusButtonActionPerformed
         if(allProcesses.isEmpty() == false){
-            outputArea.append("\tSystem Status Report\n");
             outputArea.append("Time Quantum: "+Integer.toString(timeQuantum)+"\n");
             getSystemTime();
-            outputArea.append("Current System Time: "+Integer.toString(currentTime)+"\n");
-            outputArea.append("All "+allProcesses.size()+" Processes:\n");
+            outputArea.append("Current System Time: "+Integer.toString(currentTime)+"\n\n");
+            outputArea.append("Rules Selected:\n");
+            outputArea.append("Multiple Processes Entering Ready At Once: "+cmbMultipleStatesEnteringReady.getSelectedItem().toString()+"\n");
+            outputArea.append("Multiple Processes Admitted At Once: "+cmbAdmittedSameTime.getSelectedItem().toString()+"\n");
+            outputArea.append("Multiple Processes Exiting Waiting At Once: "+cmbExitingWaitingSameTime.getSelectedItem().toString()+"\n");
+            outputArea.append("\nAll "+allProcesses.size()+" Processes:\n");
             for(int i = 0; i < allProcesses.size(); i++) {
                 outputArea.append("\t"+allProcesses.get(i).toString()+"\n");
-            } //Prints every Process
+            }//Prints every Process
             outputArea.append(newProcessList.size()+" New Processes:\n");
             if(newProcessList.isEmpty() == false){
                 for(int i = 0; i < newProcessList.size(); i++) {
                     outputArea.append("\t"+newProcessList.get(i).toString()+"\n");
-                } //Prints every Process in New state
+                }//Prints every Process in New state
             }else{
                 outputArea.append("\n");
             }
@@ -552,13 +552,13 @@ public class Interface extends javax.swing.JFrame {
             if(readyProcessList.isEmpty() == false){
                 for(int i = 0; i < readyProcessList.size(); i++) {
                     outputArea.append("\t"+readyProcessList.get(i).toString()+"\n");
-                } //Prints every Process in Ready state
+                }//Prints every Process in Ready state
             }else{
                 outputArea.append("\n");
             }
             outputArea.append("Currently Running Process:\n");
             if(runningProcessList.isEmpty() == false){ //Prints the Process in Running
-                outputArea.append(runningProcessList.get(0).toString());
+                outputArea.append("\t"+runningProcessList.get(0).toString()+"\n");
             }else{
                 outputArea.append("\n");
             }
@@ -574,7 +574,7 @@ public class Interface extends javax.swing.JFrame {
             if(termProcessList.isEmpty() == false){  
                 for(int i = 0; i < termProcessList.size(); i++) {
                     outputArea.append("\t"+termProcessList.get(i).toString()+"\n");
-                } //Prints all Terminated Processes
+                }//Prints all Terminated Processes
             }else{
                 outputArea.append("\n");
             } 
@@ -583,9 +583,6 @@ public class Interface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_statusButtonActionPerformed
     private void clockStepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clockStepButtonActionPerformed
-        theClock.setOrder(cmbMultipleStatesEnteringWaiting.getSelectedItem().toString());
-        theClock.setWaitRule(cmbExitingWaitingSameTime.getSelectedItem().toString());
-        theClock.setAdmitRule(cmbAdmittedSameTime.getSelectedItem().toString());
         if(allProcesses.isEmpty() == false){
             outputArea.setText("Clock advanced one cycle\n");
             theClock.prepareScheduler(allProcesses, newProcessList, readyProcessList, runningProcessList, waitingProcessList, termProcessList, timeQuantum);
