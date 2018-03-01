@@ -50,41 +50,41 @@ public class Simulator{
     public void sortList(ArrayList<Process> list, String rule){
         //This method determines how multiple Processes exiting a state are sorted
         if(list.isEmpty() == false && list.size() > 1){
-            switch(rule){
-                case "dataOrder":
-                    ArrayList<Process> temp1 = new ArrayList<Process>();
-                    for (int i = 0; i < list.size(); i++) {
-                        temp1.add(null);
-                    }
-                    for(int i = 0; i < list.size(); i++){
-                        int index = list.get(i).findProcessIndex(allProcesses);
-                        temp1.set(index, list.get(i));
-                    }
-                    list.clear();
-                    list.addAll(temp1);
-                case "dataOrderReverse":
-                    ArrayList<Process> temp2 = new ArrayList<Process>();
-                    for (int i = 0; i < list.size(); i++) {
-                        temp2.add(null);
-                    }
-                    for(int i = 0; i < list.size(); i++){
-                        int index = list.get(i).findProcessIndex(allProcesses);
-                        temp2.set((list.size()-1)-index, list.get(i));
-                    }
-                    list.clear();
-                    list.addAll(temp2);
-                case "creationTime":
-                    Collections.sort(list);
-                    break;
-                case "creationTimeReverse":
-                    Collections.sort(list, Process.sortCTReverse);
-                    break;
-                case "alphabetical":
-                    Collections.sort(list, Process.sortAlphabetically);
-                    break;
-                case "alphabeticalReverse":
-                    Collections.sort(list, Process.sortAlphabeticallyReverse);
-                    break;
+            if(rule.equals("dataOrder")){
+                ArrayList<Process> temp1 = new ArrayList<Process>();
+                for (int i = 0; i < list.size(); i++) {
+                    temp1.add(null);
+                }
+                for(int i = 0; i < list.size(); i++){
+                    int index = list.get(i).findProcessIndex(allProcesses);
+                    temp1.set(index, list.get(i));
+                }
+                list.clear();
+                list.addAll(temp1);
+            }
+            else if(rule.equals("dataOrderReverse")){
+                ArrayList<Process> temp2 = new ArrayList<Process>();
+                for (int i = 0; i < list.size(); i++) {
+                    temp2.add(null);
+                }
+                for(int i = 0; i < list.size(); i++){
+                    int index = list.get(i).findProcessIndex(allProcesses);
+                    temp2.set((list.size()-1)-index, list.get(i));
+                }
+                list.clear();
+                list.addAll(temp2);
+            }
+            else if(rule.equals("creationTime")){
+                Collections.sort(list);
+            }
+            else if(rule.equals("creationTimeReverse")){
+                Collections.sort(list, Process.sortCTReverse);
+            }
+            else if(rule.equals("alphabetical")){
+                Collections.sort(list, Process.sortAlphabetically);
+            }
+            else if(rule.equals("alphabeticalReverse")){
+                Collections.sort(list, Process.sortAlphabeticallyReverse);
             }
         } 
     }
@@ -96,13 +96,10 @@ public class Simulator{
             String[] tempTraceTapeCharacters = runningTraceTape.split(" ");
             //Putting the Trace Tape into an ArrayList makes it easier to remove things
             ArrayList<String> splitTraceTape = new ArrayList<>();
-            for(int i = 0; i < tempTraceTapeCharacters.length; i++) {
-                splitTraceTape.add(tempTraceTapeCharacters[i]);
-            }
+            splitTraceTape.addAll(Arrays.asList(tempTraceTapeCharacters));
             int runCyclesLeft = Integer.parseInt(splitTraceTape.get(1));
             //If the Time Quantum hasn't expired, check the Trace Tape
-            if(runningCounter != tq+1){  
-                //System.out.println("\tnumCycles "+runCyclesLeft);
+            if(runningCounter != tq+1){
                 //If a "C _" block is finished, remove it
                 if(runCyclesLeft == 0){
                     splitTraceTape.remove(1);
@@ -113,7 +110,6 @@ public class Simulator{
                         termProcessList.add(runningProcessList.get(0));
                         runningProcessList.remove(0);
                         runningCounter = -1;
-                        System.out.println("The Running Process was Terminated");
                     }else if(splitTraceTape.get(0).equals("I")){
                         //If the Trace Tape is not empty, go to Waiting
                         //Update the Trace Tape first
@@ -123,7 +119,6 @@ public class Simulator{
                         waitingArrivalTimeList.add(ct);
                         runningProcessList.remove(0);
                         runningCounter = -1;
-                        System.out.println("The Running Process moved to Waiting");
                     }
                 }else{ //If not finished with the CPU, decrement the number of cycles left
                     if(runningCounter != 0){
@@ -139,11 +134,21 @@ public class Simulator{
                 if(runCyclesLeft == 0){
                     splitTraceTape.remove(1);
                     splitTraceTape.remove(0);
-                    rebuildTraceTape(splitTraceTape, runningProcessList.get(0));
-                    waitingProcessList.add(runningProcessList.get(0));
-                    waitingArrivalTimeList.add(ct);
-                    runningProcessList.remove(0);
-                    runningCounter = -1;
+                    //If the Trace Tape is empty, go to Terminated
+                    if(splitTraceTape.isEmpty()){
+                        termProcessList.add(runningProcessList.get(0));
+                        runningProcessList.remove(0);
+                        runningCounter = -1;
+                    }else if(splitTraceTape.get(0).equals("I")){
+                        //If the Trace Tape is not empty, go to Waiting
+                        //Update the Trace Tape first
+                        Process tempP = runningProcessList.get(0);
+                        rebuildTraceTape(splitTraceTape, tempP);
+                        waitingProcessList.add(tempP);
+                        waitingArrivalTimeList.add(ct);
+                        runningProcessList.remove(0);
+                        runningCounter = -1;
+                    }
                 }else{
                     //Update the Trace Tape first
                     Process tempP = runningProcessList.get(0);
@@ -185,7 +190,6 @@ public class Simulator{
                     splitTraceTape.set(1, Integer.toString(waitCyclesLeft));
                     rebuildTraceTape(splitTraceTape, waitingProcessList.get(i));
                 }else{ //If it IS finished, remove that block and move the Process into Ready
-                    System.out.println("A Process is done Waiting");
                     splitTraceTape.remove(1);
                     splitTraceTape.remove(0);
                     rebuildTraceTape(splitTraceTape, waitingProcessList.get(i));
