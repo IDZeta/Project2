@@ -50,29 +50,26 @@ public class Simulator{
     public void sortList(ArrayList<Process> list, String rule){
         //This method determines how multiple Processes exiting a state are sorted
         if(list.isEmpty() == false && list.size() > 1){
-            if(rule.equals("dataOrder")){
-                ArrayList<Process> temp1 = new ArrayList<Process>();
-                for (int i = 0; i < list.size(); i++) {
-                    temp1.add(null);
+            if(rule.equals("dataOrder") || rule.equals("dataOrderReverse")){
+                ArrayList<Process> temp = new ArrayList<Process>();
+                for (int i = 0; i < allProcesses.size(); i++) {
+                    temp.add(null);
                 }
                 for(int i = 0; i < list.size(); i++){
                     int index = list.get(i).findProcessIndex(allProcesses);
-                    temp1.set(index, list.get(i));
+                    if(rule.equals("dataOrder")){
+                        temp.set(index, list.get(i));
+                    }else{
+                        temp.set((list.size()-1)-index, list.get(i));
+                    }
                 }
                 list.clear();
-                list.addAll(temp1);
-            }
-            else if(rule.equals("dataOrderReverse")){
-                ArrayList<Process> temp2 = new ArrayList<Process>();
-                for (int i = 0; i < list.size(); i++) {
-                    temp2.add(null);
+                for (int i = 0; i < temp.size(); i++) {
+                    if(temp.get(i) != null){
+                        list.add(temp.get(i));
+                    }
                 }
-                for(int i = 0; i < list.size(); i++){
-                    int index = list.get(i).findProcessIndex(allProcesses);
-                    temp2.set((list.size()-1)-index, list.get(i));
-                }
-                list.clear();
-                list.addAll(temp2);
+                temp.clear();
             }
             else if(rule.equals("creationTime")){
                 Collections.sort(list);
